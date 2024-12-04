@@ -7,9 +7,9 @@
 
 /* Configuração do body */
 body {
-    background-color: #f0f4f8;  /* Cor de fundo suave */
-    font-family: 'Roboto', sans-serif;  /* Fonte moderna */
-    color: #333;  /* Cor do texto */
+    background-color: #f0f4f8;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,6 +63,14 @@ body {
     text-align: left;
 }
 
+/* Loading */
+.loading {
+    color: #888;
+    font-style: italic;
+    margin: 10px 0;
+    text-align: center;
+}
+
 /* Input do chat */
 #chatInput {
     width: 100%;
@@ -76,10 +84,10 @@ body {
 }
 
 #chatInput:focus {
-    border-color: #007bff;  /* Bordas azuis ao focar */
+    border-color: #007bff;
 }
 
-/* Botão de enviar (opcional, se precisar adicionar um botão de envio) */
+/* Botão de enviar (se necessário) */
 #sendBtn {
     background-color: #007bff;
     color: #fff;
@@ -88,19 +96,10 @@ body {
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s ease;
 }
 
 #sendBtn:hover {
-    background-color: #0056b3; /* Cor de hover para o botão */
-}
-
-/* Imagens do chat */
-img {
-    max-width: 100%;
-    margin-top: 10px;
-    border-radius: 8px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    background-color: #0056b3;
 }
 
 /* Animação suave para a entrada de mensagens */
@@ -125,7 +124,7 @@ img {
     font-style: italic;
 }
 
-/* Pequenos ajustes de responsividade */
+/* Responsividade */
 @media (max-width: 480px) {
     #chat-container {
         width: 90%;

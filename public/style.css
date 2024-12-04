@@ -1,0 +1,137 @@
+/* Resetando margens e paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Configuração do body */
+body {
+    background-color: #f0f4f8;  /* Cor de fundo suave */
+    font-family: 'Roboto', sans-serif;  /* Fonte moderna */
+    color: #333;  /* Cor do texto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Container do chat */
+#chat-container {
+    width: 400px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90vh;
+    max-height: 600px;
+    overflow: hidden;
+}
+
+/* Estilo do campo de chat */
+#chat {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Mensagem do usuário */
+.user {
+    color: #2d3a4d;
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: right;
+}
+
+/* Mensagem do bot */
+.bot {
+    color: #007bff;
+    font-weight: normal;
+    margin: 10px 0;
+    text-align: left;
+}
+
+/* Input do chat */
+#chatInput {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    background-color: #fff;
+}
+
+#chatInput:focus {
+    border-color: #007bff;  /* Bordas azuis ao focar */
+}
+
+/* Botão de enviar (opcional, se precisar adicionar um botão de envio) */
+#sendBtn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#sendBtn:hover {
+    background-color: #0056b3; /* Cor de hover para o botão */
+}
+
+/* Imagens do chat */
+img {
+    max-width: 100%;
+    margin-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Animação suave para a entrada de mensagens */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user, .bot {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Estilos adicionais */
+#chatInput::placeholder {
+    color: #bbb;
+    font-style: italic;
+}
+
+/* Pequenos ajustes de responsividade */
+@media (max-width: 480px) {
+    #chat-container {
+        width: 90%;
+    }
+
+    #chatInput {
+        padding: 10px;
+    }
+}

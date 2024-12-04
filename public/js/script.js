@@ -8,34 +8,15 @@ function displayMessage(message, sender) {
     chatDiv.scrollTop = chatDiv.scrollHeight; // Rolagem automática para o final
 }
 
-// Função para exibir o loading
-function displayLoading() {
-    const loadingElement = document.createElement('div');
-    loadingElement.classList.add('loading');
-    loadingElement.textContent = 'Carregando...';
-    document.getElementById('chat').appendChild(loadingElement);
-}
-
-// Função para remover o loading
-function removeLoading() {
-    const loadingElement = document.querySelector('.loading');
-    if (loadingElement) {
-        loadingElement.remove();
-    }
-}
-
 // Função para exibir a imagem de gato
 function displayCatImage() {
     displayLoading();  // Mostra o loading enquanto a imagem é carregada
     const imgElement = document.createElement('img');
     imgElement.src = 'https://cataas.com/cat';  // URL para obter imagem de gato
     imgElement.alt = "Gato";
-    imgElement.style.width = "200px";  // Define a largura fixa
-    imgElement.style.height = "auto";  // Mantém a proporção
     imgElement.onload = function() {
         removeLoading();  // Remove o loading após a imagem ser carregada
         document.getElementById('chat').appendChild(imgElement);
-        playSound('catSound');  // Toca o som de gato
     };
     imgElement.onerror = function() {
         removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
@@ -53,12 +34,9 @@ function displayDogImage() {
             const imgElement = document.createElement('img');
             imgElement.src = imageUrl;
             imgElement.alt = "Cachorro";
-            imgElement.style.width = "200px";  // Define a largura fixa
-            imgElement.style.height = "auto";  // Mantém a proporção
             imgElement.onload = function() {
                 removeLoading();  // Remove o loading após a imagem ser carregada
                 document.getElementById('chat').appendChild(imgElement);
-                playSound('dogSound');  // Toca o som de cachorro
             };
             imgElement.onerror = function() {
                 removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
@@ -81,12 +59,9 @@ function displayFoxImage() {
             const imgElement = document.createElement('img');
             imgElement.src = imageUrl;
             imgElement.alt = "Raposa";
-            imgElement.style.width = "200px";  // Define a largura fixa
-            imgElement.style.height = "auto";  // Mantém a proporção
             imgElement.onload = function() {
                 removeLoading();  // Remove o loading após a imagem ser carregada
                 document.getElementById('chat').appendChild(imgElement);
-                playSound('foxSound');  // Toca o som de raposa
             };
             imgElement.onerror = function() {
                 removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
@@ -99,43 +74,60 @@ function displayFoxImage() {
         });
 }
 
-// Função para exibir a imagem de coelho
-function displayBunnyImage() {
+// Função para exibir a imagem de pato
+function displayDuckImage() {
     displayLoading();  // Mostra o loading enquanto a imagem é carregada
-    fetch('https://api.bunnies.io/v2/loop/random/?media=gif')
+    fetch('https://random-d.uk/api/random')
         .then(response => response.json())
         .then(data => {
-            const imageUrl = data.media.gif;
+            const imageUrl = data.url;
             const imgElement = document.createElement('img');
             imgElement.src = imageUrl;
-            imgElement.alt = "Coelho";
-            imgElement.style.width = "200px";  // Define a largura fixa
-            imgElement.style.height = "auto";  // Mantém a proporção
+            imgElement.alt = "Pato";
             imgElement.onload = function() {
                 removeLoading();  // Remove o loading após a imagem ser carregada
                 document.getElementById('chat').appendChild(imgElement);
-                playSound('bunnySound');  // Toca o som de coelho
             };
             imgElement.onerror = function() {
                 removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
-                displayMessage("Erro ao carregar a imagem de coelho.", 'bot');
+                displayMessage("Erro ao carregar a imagem de pato.", 'bot');
             };
         })
         .catch(error => {
             removeLoading();  // Remove o loading caso ocorra um erro na requisição
-            displayMessage("Erro ao pegar a imagem de coelho: " + error, 'bot');
+            displayMessage("Erro ao pegar a imagem de pato: " + error, 'bot');
         });
 }
 
-// Função para tocar som
+// Função para exibir o loading
+function displayLoading() {
+    const loadingElement = document.createElement('div');
+    loadingElement.classList.add('loading');
+    loadingElement.textContent = 'Carregando...';
+    document.getElementById('chat').appendChild(loadingElement);
+}
+
+// Função para remover o loading
+function removeLoading() {
+    const loadingElement = document.querySelector('.loading');
+    if (loadingElement) {
+        loadingElement.remove();
+    }
+}
+
+// Função para tocar som baseado no comando
 function playSound(soundId) {
     const sound = document.getElementById(soundId);
-    sound.play();
+    if (sound) {
+        sound.play();
+    }
 }
 
 // Função para capturar o input do chat e detectar o Enter
-document.getElementById("chatInput").addEventListener("keypress", function(event) {
+document.getElementById("chatInput").addEventListener("keydown", function(event) {
     if (event.key === "Enter") {  // Quando pressionar Enter
+        event.preventDefault();  // Evita o comportamento padrão (para que o campo de input não seja limpo automaticamente)
+
         const userInput = event.target.value.toLowerCase().trim();
 
         // Exibe a mensagem do usuário no chat
@@ -151,14 +143,92 @@ document.getElementById("chatInput").addEventListener("keypress", function(event
         } else if (userInput === "/image fox") {
             displayFoxImage();  // Exibe a imagem de raposa
             displayMessage("Aqui está a imagem de uma raposa!", 'bot');
-        } else if (userInput === "/image bunny") {
-            displayBunnyImage();  // Exibe a imagem de coelho
-            displayMessage("Aqui está a imagem de um coelho!", 'bot');
+        } else if (userInput === "/image duck") {
+            displayDuckImage();  // Exibe a imagem de pato
+            displayMessage("Aqui está a imagem de um pato!", 'bot');
+        } else if (userInput === "/sound cat") {
+            playSound('catSound');  // Toca o som de gato
+            displayMessage("Aqui está o som de um gato!", 'bot');
+        } else if (userInput === "/sound dog") {
+            playSound('dogSound');  // Toca o som de cachorro
+            displayMessage("Aqui está o som de um cachorro!", 'bot');
+        } else if (userInput === "/sound fox") {
+            playSound('foxSound');  // Toca o som de raposa
+            displayMessage("Aqui está o som de uma raposa!", 'bot');
+        } else if (userInput === "/sound duck") {
+            playSound('duckSound');  // Toca o som de pato
+            displayMessage("Aqui está o som de um pato!", 'bot');
+        } else if (userInput === "/sound gun") {
+            playSound('gunSound');
+            displayMessage("Aqui está o som de uma arma do Star Wars!", 'bot');
+        } else if (userInput === "/sound mario") {
+            playSound('marioSound'); 
+            displayMessage("Aqui está o som do Mario!", 'bot');
+        } else if (userInput === "/sound wow") {
+            playSound('wowSound'); 
+            displayMessage("Wowwwwwwwww!", 'bot');
+        } else if (userInput === "/sound boy") {
+            playSound('boySound');
+            displayMessage("Yeah boyyyyy", 'bot');
         } else {
-            displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox ou /image bunny.", 'bot');
+            displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox, /image duck, ou /sound cat, /sound dog, /sound fox, /sound duck.", 'bot');
         }
 
         // Limpa o campo de input após enviar a mensagem
         event.target.value = "";
+    }
+});
+
+// Função para capturar o clique do botão de envio
+document.getElementById("sendBtn").addEventListener("click", function() {
+    const userInput = document.getElementById("chatInput").value.toLowerCase().trim();
+
+    if (userInput !== "") {
+        // Exibe a mensagem do usuário no chat
+        displayMessage(userInput, 'user');
+
+        // Verifica o comando e executa a ação
+        if (userInput === "/image cat") {
+            displayCatImage();
+            displayMessage("Aqui está a imagem de um gato!", 'bot');
+        } else if (userInput === "/image dog") {
+            displayDogImage();
+            displayMessage("Aqui está a imagem de um cachorro!", 'bot');
+        } else if (userInput === "/image fox") {
+            displayFoxImage();
+            displayMessage("Aqui está a imagem de uma raposa!", 'bot');
+        } else if (userInput === "/image duck") {
+            displayDuckImage();
+            displayMessage("Aqui está a imagem de um pato!", 'bot');
+        } else if (userInput === "/sound cat") {
+            playSound('catSound');
+            displayMessage("Aqui está o som de um gato!", 'bot');
+        } else if (userInput === "/sound dog") {
+            playSound('dogSound');
+            displayMessage("Aqui está o som de um cachorro!", 'bot');
+        } else if (userInput === "/sound fox") {
+            playSound('foxSound');
+            displayMessage("Aqui está o som de uma raposa!", 'bot');
+        } else if (userInput === "/sound duck") {
+            playSound('duckSound');
+            displayMessage("Aqui está o som de um pato!", 'bot');
+        } else if (userInput === "/sound gun") {
+            playSound('gunSound');
+            displayMessage("Aqui está o som de uma arma do Star Wars!", 'bot');
+        } else if (userInput === "/sound mario") {
+            playSound('marioSound'); 
+            displayMessage("Aqui está o som do Mario!", 'bot');
+        } else if (userInput === "/sound wow") {
+            playSound('wowSound'); 
+            displayMessage("Wowwwwwwwww!", 'bot');
+        } else if (userInput === "/sound boy") {
+            playSound('boySound');
+            displayMessage("Yeah boyyyyy", 'bot');
+        } else {
+            displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox, /image duck, ou /sound cat, /sound dog, /sound fox, /sound duck.", 'bot');
+        }
+
+        // Limpa o campo de input após enviar a mensagem
+        document.getElementById("chatInput").value = "";
     }
 });

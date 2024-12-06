@@ -8,97 +8,6 @@ function displayMessage(message, sender) {
     chatDiv.scrollTop = chatDiv.scrollHeight; // Rolagem automática para o final
 }
 
-// Função para exibir a imagem de gato
-function displayCatImage() {
-    displayLoading();  // Mostra o loading enquanto a imagem é carregada
-    const imgElement = document.createElement('img');
-    imgElement.src = 'https://cataas.com/cat';  // URL para obter imagem de gato
-    imgElement.alt = "Gato";
-    imgElement.onload = function() {
-        removeLoading();  // Remove o loading após a imagem ser carregada
-        document.getElementById('chat').appendChild(imgElement);
-    };
-    imgElement.onerror = function() {
-        removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
-        displayMessage("Erro ao carregar a imagem de gato.", 'bot');
-    };
-}
-
-// Função para exibir a imagem de cachorro
-function displayDogImage() {
-    displayLoading();  // Mostra o loading enquanto a imagem é carregada
-    fetch('https://dog.ceo/api/breeds/image/random')
-        .then(response => response.json())
-        .then(data => {
-            const imageUrl = data.message;
-            const imgElement = document.createElement('img');
-            imgElement.src = imageUrl;
-            imgElement.alt = "Cachorro";
-            imgElement.onload = function() {
-                removeLoading();  // Remove o loading após a imagem ser carregada
-                document.getElementById('chat').appendChild(imgElement);
-            };
-            imgElement.onerror = function() {
-                removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
-                displayMessage("Erro ao carregar a imagem de cachorro.", 'bot');
-            };
-        })
-        .catch(error => {
-            removeLoading();  // Remove o loading caso ocorra um erro na requisição
-            displayMessage("Erro ao pegar a imagem de cachorro: " + error, 'bot');
-        });
-}
-
-// Função para exibir a imagem de raposa
-function displayFoxImage() {
-    displayLoading();  // Mostra o loading enquanto a imagem é carregada
-    fetch('https://randomfox.ca/floof/')
-        .then(response => response.json())
-        .then(data => {
-            const imageUrl = data.image;
-            const imgElement = document.createElement('img');
-            imgElement.src = imageUrl;
-            imgElement.alt = "Raposa";
-            imgElement.onload = function() {
-                removeLoading();  // Remove o loading após a imagem ser carregada
-                document.getElementById('chat').appendChild(imgElement);
-            };
-            imgElement.onerror = function() {
-                removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
-                displayMessage("Erro ao carregar a imagem de raposa.", 'bot');
-            };
-        })
-        .catch(error => {
-            removeLoading();  // Remove o loading caso ocorra um erro na requisição
-            displayMessage("Erro ao pegar a imagem de raposa: " + error, 'bot');
-        });
-}
-
-// Função para exibir a imagem de pato
-function displayDuckImage() {
-    displayLoading();  // Mostra o loading enquanto a imagem é carregada
-    fetch('https://random-d.uk/api/random')
-        .then(response => response.json())
-        .then(data => {
-            const imageUrl = data.url;
-            const imgElement = document.createElement('img');
-            imgElement.src = imageUrl;
-            imgElement.alt = "Pato";
-            imgElement.onload = function() {
-                removeLoading();  // Remove o loading após a imagem ser carregada
-                document.getElementById('chat').appendChild(imgElement);
-            };
-            imgElement.onerror = function() {
-                removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
-                displayMessage("Erro ao carregar a imagem de pato.", 'bot');
-            };
-        })
-        .catch(error => {
-            removeLoading();  // Remove o loading caso ocorra um erro na requisição
-            displayMessage("Erro ao pegar a imagem de pato: " + error, 'bot');
-        });
-}
-
 // Função para exibir o loading
 function displayLoading() {
     const loadingElement = document.createElement('div');
@@ -115,12 +24,35 @@ function removeLoading() {
     }
 }
 
-// Função para tocar som baseado no comando
-function playSound(soundId) {
-    const sound = document.getElementById(soundId);
-    if (sound) {
-        sound.play();
-    }
+// Função para exibir uma imagem gerada pela OpenAI
+function displayOpenAIImage(prompt) {
+    displayLoading(); // Mostra o loading enquanto a imagem é gerada
+    fetch('/api/openai-image', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const imageUrl = data;
+        const imgElement = document.createElement('img');
+        imgElement.src = imageUrl;
+        imgElement.alt = "Imagem gerada pela OpenAI";
+        imgElement.onload = function() {
+            removeLoading(); // Remove o loading após a imagem ser carregada
+            document.getElementById('chat').appendChild(imgElement);
+        };
+        imgElement.onerror = function() {
+            removeLoading(); // Remove o loading caso haja erro no carregamento da imagem
+            displayMessage("Erro ao carregar a imagem gerada pela OpenAI.", 'bot');
+        };
+    })
+    .catch(error => {
+        removeLoading(); // Remove o loading caso ocorra um erro na requisição
+        displayMessage("Erro ao gerar a imagem pela OpenAI: " + error, 'bot');
+    });
 }
 
 // Função para capturar o input do chat e detectar o Enter
@@ -146,6 +78,10 @@ document.getElementById("chatInput").addEventListener("keydown", function(event)
         } else if (userInput === "/image duck") {
             displayDuckImage();  // Exibe a imagem de pato
             displayMessage("Aqui está a imagem de um pato!", 'bot');
+        } else if (userInput.startsWith("/openai ")) {
+            const prompt = userInput.replace("/openai ", "");
+            displayOpenAIImage(prompt);  // Gera e exibe a imagem com OpenAI
+            displayMessage(`Gerando imagem para: ${prompt}`, 'bot');
         } else if (userInput === "/sound cat") {
             playSound('catSound');  // Toca o som de gato
             displayMessage("Aqui está o som de um gato!", 'bot');
@@ -171,7 +107,7 @@ document.getElementById("chatInput").addEventListener("keydown", function(event)
             playSound('boySound');
             displayMessage("Yeah boyyyyy", 'bot');
         } else {
-            displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox, /image duck, ou /sound cat, /sound dog, /sound fox, /sound duck.", 'bot');
+            displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox, /image duck, /openai [prompt], ou /sound cat, /sound dog, /sound fox, /sound duck.", 'bot');
         }
 
         // Limpa o campo de input após enviar a mensagem
@@ -200,6 +136,10 @@ document.getElementById("sendBtn").addEventListener("click", function() {
         } else if (userInput === "/image duck") {
             displayDuckImage();
             displayMessage("Aqui está a imagem de um pato!", 'bot');
+        } else if (userInput.startsWith("/openai ")) {
+            const prompt = userInput.replace("/openai ", "");
+            displayOpenAIImage(prompt);  // Gera e exibe a imagem com OpenAI
+            displayMessage(`Gerando imagem para: ${prompt}`, 'bot');
         } else if (userInput === "/sound cat") {
             playSound('catSound');
             displayMessage("Aqui está o som de um gato!", 'bot');
@@ -225,7 +165,7 @@ document.getElementById("sendBtn").addEventListener("click", function() {
             playSound('boySound');
             displayMessage("Yeah boyyyyy", 'bot');
         } else {
-            displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox, /image duck, ou /sound cat, /sound dog, /sound fox, /sound duck.", 'bot');
+            displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox, /image duck, /openai [prompt], ou /sound cat, /sound dog, /sound fox, /sound duck.", 'bot');
         }
 
         // Limpa o campo de input após enviar a mensagem

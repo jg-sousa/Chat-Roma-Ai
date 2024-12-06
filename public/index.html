@@ -9,10 +9,18 @@
 </head>
 <body>
 
-<!-- Contêiner do chat -->
-<div id="chat-container">
+<!-- Tela de Login -->
+<div id="login-container">
+    <h2>Bem-vindo ao Chat</h2>
+    <form id="login-form">
+        <input type="text" id="username" placeholder="Digite seu nome de usuário" required>
+        <button type="submit">Entrar</button>
+    </form>
+</div>
+
+<!-- Contêiner do Chat -->
+<div id="chat-container" style="display: none;">
     <div id="chat"></div>
-<!-- Container para o input e o botão -->
     <div class="input-container">
         <input type="text" id="chatInput" placeholder="Digite um comando..." />
         <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
@@ -20,15 +28,14 @@
 </div>
 
 <!-- Sons -->
-<!-- Sons -->
-    <audio id="catSound" src="sons/cat.mp3"></audio>
-    <audio id="dogSound" src="sons/dog.mp3"></audio>
-    <audio id="foxSound" src="sons/fox.mp3"></audio>
-    <audio id="duckSound" src="sons/duck.mp3"></audio>
-    <audio id="gunSound" src="sons/gun.mp3"></audio>
-    <audio id="marioSound" src="sons/mario.mp3"></audio>
-    <audio id="wowSouns" src="sons/wow.mp3"></audio>
-    <audio id="boySound" src="sons/boy.mp3"></audio>
+<audio id="catSound" src="sons/cat.mp3"></audio>
+<audio id="dogSound" src="sons/dog.mp3"></audio>
+<audio id="foxSound" src="sons/fox.mp3"></audio>
+<audio id="duckSound" src="sons/duck.mp3"></audio>
+<audio id="gunSound" src="sons/gun.mp3"></audio>
+<audio id="marioSound" src="sons/mario.mp3"></audio>
+<audio id="wowSound" src="sons/wow.mp3"></audio>
+<audio id="boySound" src="sons/boy.mp3"></audio>
 
 <script src="js/script.js"></script>
 </body>

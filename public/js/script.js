@@ -233,22 +233,3 @@ document.getElementById("sendBtn").addEventListener("click", function() {
     }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("login-form");
-    const loginContainer = document.getElementById("login-container");
-    const chatContainer = document.getElementById("chat-container");
-
-    // Gerenciar login
-    loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const username = document.getElementById("username").value;
-
-        if (username.trim() !== "") {
-            alert(`Bem-vindo, ${username}!`);
-            loginContainer.style.display = "none";
-            chatContainer.style.display = "block";
-        } else {
-            alert("Por favor, insira um nome de usuário válido.");
-        }
-    });
-});

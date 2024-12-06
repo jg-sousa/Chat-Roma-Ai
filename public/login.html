@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Chat</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div id="login-container">
+        <h2>Bem-vindo ao Chat</h2>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="Digite seu nome de usuário" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+    <script>
+        const loginForm = document.getElementById("login-form");
+
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+
+            if (username.trim() !== "") {
+                // Salva o nome de usuário no localStorage
+                localStorage.setItem("username", username);
+
+                // Redireciona para o chat
+                window.location.href = "index.html";
+            } else {
+                alert("Por favor, insira um nome de usuário válido.");
+            }
+        });
+    </script>
+</body>
+</html>

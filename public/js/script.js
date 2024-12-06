@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const chatInput = document.getElementById('chatInput');
     const chatContainer = document.getElementById('chat');
   
-    // Função para gerar e adicionar mensagens no cha
+    // Função para gerar e adicionar mensagens no chat
     function addMessage(content, sender = 'user') {
       const messageDiv = document.createElement('div');
       messageDiv.classList.add('message', sender);
@@ -47,7 +47,21 @@ document.addEventListener("DOMContentLoaded", function() {
     // Função que manipula a entrada do usuário e executa a ação correspondente
     async function handleUserInput(input) {
       // Checar qual comando foi digitado e agir de acordo
-if (input.startsWith("/openai")) {
+      if (input.startsWith("/image")) {
+        const command = input.split(" ")[1]; // Extrair o comando (gato, cachorro, etc.)
+  
+        if (command === "cat") {
+          await generateImage('/api/cat');
+        } else if (command === "dog") {
+          await generateImage('/api/dog');
+        } else if (command === "fox") {
+          await generateImage('/api/fox');
+        } else if (command === "duck") {
+          await generateImage('/api/duck');
+        } else {
+          addMessage("Comando de imagem não reconhecido. Use: /image cat, /image dog, etc.", "system");
+        }
+      } else if (input.startsWith("/openai")) {
         const prompt = input.split(" ").slice(1).join(" "); // Extrair o prompt para OpenAI
   
         if (prompt) {

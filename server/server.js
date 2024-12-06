@@ -1,94 +1,49 @@
-// server.js
-
 const express = require('express');
 const axios = require('axios');
-const { OpenAI } = require('openai'); // Biblioteca da OpenAI
-const bodyParser = require('body-parser');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
-const port = 8080;
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Configurar o parser para JSON
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public'))); // Para servir arquivos estáticos (como CSS, JS, etc.)
+// Função auxiliar para buscar imagem de API pública
+async function fetchImage(url) {
+    try {
+        const response = await axios.get(url);
+        return response.data[0]?.url || response.data.image || response.data.message;  // Extrai URL da imagem conforme a estrutura da API
+    } catch (error) {
+        console.error("Erro ao buscar imagem:", error);
+        return null;
+    }
+}
 
-// Instância do cliente OpenAI
-const openai = new OpenAI({
-  apiKey: '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', // Substitua com sua chave de API da OpenAI
-});
-
-// Endpoint para gerar imagem de Gato
+// Rota para imagem de gatos
 app.post('/api/cat', async (req, res) => {
-  try {
-    const response = await axios.get('https://api.thecatapi.com/v1/images/search');
-    const imageUrl = response.data[0].url;
-    res.json({ url: imageUrl });
-  } catch (error) {
-    console.error("Erro ao gerar imagem de gato:", error);
-    res.status(500).send("Erro ao gerar imagem de gato.");
-  }
+    const imageUrl = await fetchImage('https://api.thecatapi.com/v1/images/search');
+    res.json(imageUrl);
 });
 
-// Endpoint para gerar imagem de Cachorro
+// Rota para imagem de cachorros
 app.post('/api/dog', async (req, res) => {
-  try {
-    const response = await axios.get('https://dog.ceo/api/breeds/image/random');
-    const imageUrl = response.data.message;
-    res.json({ url: imageUrl });
-  } catch (error) {
-    console.error("Erro ao gerar imagem de cachorro:", error);
-    res.status(500).send("Erro ao gerar imagem de cachorro.");
-  }
+    const imageUrl = await fetchImage('https://dog.ceo/api/breeds/image/random');
+    res.json(imageUrl);
 });
 
-// Endpoint para gerar imagem de Raposa
+// Rota para imagem de raposas
 app.post('/api/fox', async (req, res) => {
-  try {
-    const response = await axios.get('https://randomfox.ca/floof/');
-    const imageUrl = response.data.image;
-    res.json({ url: imageUrl });
-  } catch (error) {
-    console.error("Erro ao gerar imagem de raposa:", error);
-    res.status(500).send("Erro ao gerar imagem de raposa.");
-  }
+    const imageUrl = await fetchImage('https://randomfox.ca/floof/');
+    res.json(imageUrl);
 });
 
-// Endpoint para gerar imagem de Pato
+// Rota para API pública extra (exemplo: imagens de patos)
 app.post('/api/duck', async (req, res) => {
-  try {
-    const response = await axios.get('https://random-d.uk/api/v2/random');
-    const imageUrl = response.data.url;
-    res.json({ url: imageUrl });
-  } catch (error) {
-    console.error("Erro ao gerar imagem de pato:", error);
-    res.status(500).send("Erro ao gerar imagem de pato.");
-  }
+    const imageUrl = await fetchImage('https://random-d.uk/api/random');
+    res.json(imageUrl);
 });
 
-// Endpoint para gerar imagem via OpenAI
-app.post('/api/generate-image', async (req, res) => {
-  try {
-    const { prompt } = req.body; // Recebe o prompt de descrição da imagem
-    const response = await openai.createImage({
-      prompt: prompt,
-      n: 1,
-      size: '1024x1024', // Tamanho da imagem
-    });
-    const imageUrl = response.data[0].url;
-    res.json({ url: imageUrl });
-  } catch (error) {
-    console.error("Erro ao gerar imagem via OpenAI:", error);
-    res.status(500).send("Erro ao gerar imagem via OpenAI.");
-  }
-});
-
-// Servir o arquivo index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Iniciar o servidor
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
+// Inicia o servidor
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

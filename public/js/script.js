@@ -55,6 +55,109 @@ function displayOpenAIImage(prompt) {
     });
 }
 
+// Função para exibir a imagem de gato
+function displayCatImage() {
+    displayLoading();  // Mostra o loading enquanto a imagem é carregada
+    fetch('https://api.thecatapi.com/v1/images/search')
+        .then(response => response.json())
+        .then(data => {
+            const imageUrl = data[0].url;
+            const imgElement = document.createElement('img');
+            imgElement.src = imageUrl;
+            imgElement.alt = "Gato";
+            imgElement.onload = function() {
+                removeLoading();  // Remove o loading após a imagem ser carregada
+                document.getElementById('chat').appendChild(imgElement);
+            };
+            imgElement.onerror = function() {
+                removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
+                displayMessage("Erro ao carregar a imagem de gato.", 'bot');
+            };
+        })
+        .catch(error => {
+            removeLoading();  // Remove o loading caso ocorra um erro na requisição
+            displayMessage("Erro ao pegar a imagem de gato: " + error, 'bot');
+        });
+}
+
+// Função para exibir a imagem de cachorro
+function displayDogImage() {
+    displayLoading();  // Mostra o loading enquanto a imagem é carregada
+    fetch('https://dog.ceo/api/breeds/image/random')
+        .then(response => response.json())
+        .then(data => {
+            const imageUrl = data.message;
+            const imgElement = document.createElement('img');
+            imgElement.src = imageUrl;
+            imgElement.alt = "Cachorro";
+            imgElement.onload = function() {
+                removeLoading();  // Remove o loading após a imagem ser carregada
+                document.getElementById('chat').appendChild(imgElement);
+            };
+            imgElement.onerror = function() {
+                removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
+                displayMessage("Erro ao carregar a imagem de cachorro.", 'bot');
+            };
+        })
+        .catch(error => {
+            removeLoading();  // Remove o loading caso ocorra um erro na requisição
+            displayMessage("Erro ao pegar a imagem de cachorro: " + error, 'bot');
+        });
+}
+
+// Função para exibir a imagem de raposa
+function displayFoxImage() {
+    displayLoading();  // Mostra o loading enquanto a imagem é carregada
+    fetch('https://randomfox.ca/floof/')
+        .then(response => response.json())
+        .then(data => {
+            const imageUrl = data.image;
+            const imgElement = document.createElement('img');
+            imgElement.src = imageUrl;
+            imgElement.alt = "Raposa";
+            imgElement.onload = function() {
+                removeLoading();  // Remove o loading após a imagem ser carregada
+                document.getElementById('chat').appendChild(imgElement);
+            };
+            imgElement.onerror = function() {
+                removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
+                displayMessage("Erro ao carregar a imagem de raposa.", 'bot');
+            };
+        })
+        .catch(error => {
+            removeLoading();  // Remove o loading caso ocorra um erro na requisição
+            displayMessage("Erro ao pegar a imagem de raposa: " + error, 'bot');
+        });
+}
+
+// Função para exibir a imagem de pato
+function displayDuckImage() {
+    displayLoading();  // Mostra o loading enquanto a imagem é carregada
+    fetch('https://random-d.uk/api/random')
+        .then(response => response.json())
+        .then(data => {
+            const imageUrl = data.url;
+            const imgElement = document.createElement('img');
+            imgElement.src = imageUrl;
+            imgElement.alt = "Pato";
+            imgElement.onload = function() {
+                removeLoading();  // Remove o loading após a imagem ser carregada
+                document.getElementById('chat').appendChild(imgElement);
+            };
+            imgElement.onerror = function() {
+                removeLoading();  // Remove o loading caso haja erro no carregamento da imagem
+                displayMessage("Erro ao carregar a imagem de pato.", 'bot');
+            };
+        })
+        .catch(error => {
+            removeLoading();  // Remove o loading caso ocorra um erro na requisição
+            displayMessage("Erro ao pegar a imagem de pato: " + error, 'bot');
+        });
+}
+
+// Função para tocar som 
+function playSound(soundId) { const soundElement = document.getElementById(soundId); if (soundElement) { soundElement.play(); } else { displayMessage("Erro ao tocar o som: elemento não encontrado.", 'bot'); } }
+
 // Função para capturar o input do chat e detectar o Enter
 document.getElementById("chatInput").addEventListener("keydown", function(event) {
     if (event.key === "Enter") {  // Quando pressionar Enter
@@ -109,66 +212,67 @@ document.getElementById("chatInput").addEventListener("keydown", function(event)
         } else {
             displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox, /image duck, /openai [prompt], ou /sound cat, /sound dog, /sound fox, /sound duck.", 'bot');
         }
-
+    
         // Limpa o campo de input após enviar a mensagem
         event.target.value = "";
     }
-});
-
-// Função para capturar o clique do botão de envio
-document.getElementById("sendBtn").addEventListener("click", function() {
-    const userInput = document.getElementById("chatInput").value.toLowerCase().trim();
-
-    if (userInput !== "") {
-        // Exibe a mensagem do usuário no chat
-        displayMessage(userInput, 'user');
-
-        // Verifica o comando e executa a ação
-        if (userInput === "/image cat") {
-            displayCatImage();
-            displayMessage("Aqui está a imagem de um gato!", 'bot');
-        } else if (userInput === "/image dog") {
-            displayDogImage();
-            displayMessage("Aqui está a imagem de um cachorro!", 'bot');
-        } else if (userInput === "/image fox") {
-            displayFoxImage();
-            displayMessage("Aqui está a imagem de uma raposa!", 'bot');
-        } else if (userInput === "/image duck") {
-            displayDuckImage();
-            displayMessage("Aqui está a imagem de um pato!", 'bot');
-        } else if (userInput.startsWith("/openai ")) {
-            const prompt = userInput.replace("/openai ", "");
-            displayOpenAIImage(prompt);  // Gera e exibe a imagem com OpenAI
-            displayMessage(`Gerando imagem para: ${prompt}`, 'bot');
-        } else if (userInput === "/sound cat") {
-            playSound('catSound');
-            displayMessage("Aqui está o som de um gato!", 'bot');
-        } else if (userInput === "/sound dog") {
-            playSound('dogSound');
-            displayMessage("Aqui está o som de um cachorro!", 'bot');
-        } else if (userInput === "/sound fox") {
-            playSound('foxSound');
-            displayMessage("Aqui está o som de uma raposa!", 'bot');
-        } else if (userInput === "/sound duck") {
-            playSound('duckSound');
-            displayMessage("Aqui está o som de um pato!", 'bot');
-        } else if (userInput === "/sound gun") {
-            playSound('gunSound');
-            displayMessage("Aqui está o som de uma arma do Star Wars!", 'bot');
-        } else if (userInput === "/sound mario") {
-            playSound('marioSound'); 
-            displayMessage("Aqui está o som do Mario!", 'bot');
-        } else if (userInput === "/sound wow") {
-            playSound('wowSound'); 
-            displayMessage("Wowwwwwwwww!", 'bot');
-        } else if (userInput === "/sound boy") {
-            playSound('boySound');
-            displayMessage("Yeah boyyyyy", 'bot');
-        } else {
-            displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox, /image duck, /openai [prompt], ou /sound cat, /sound dog, /sound fox, /sound duck.", 'bot');
+    });
+    
+    // Função para capturar o clique do botão de envio
+    document.getElementById("sendBtn").addEventListener("click", function() {
+        const userInput = document.getElementById("chatInput").value.toLowerCase().trim();
+    
+        if (userInput !== "") {
+            // Exibe a mensagem do usuário no chat
+            displayMessage(userInput, 'user');
+    
+            // Verifica o comando e executa a ação
+            if (userInput === "/image cat") {
+                displayCatImage();
+                displayMessage("Aqui está a imagem de um gato!", 'bot');
+            } else if (userInput === "/image dog") {
+                displayDogImage();
+                displayMessage("Aqui está a imagem de um cachorro!", 'bot');
+            } else if (userInput === "/image fox") {
+                displayFoxImage();
+                displayMessage("Aqui está a imagem de uma raposa!", 'bot');
+            } else if (userInput === "/image duck") {
+                displayDuckImage();
+                displayMessage("Aqui está a imagem de um pato!", 'bot');
+            } else if (userInput.startsWith("/openai ")) {
+                const prompt = userInput.replace("/openai ", "");
+                displayOpenAIImage(prompt);  // Gera e exibe a imagem com OpenAI
+                displayMessage(`Gerando imagem para: ${prompt}`, 'bot');
+            } else if (userInput === "/sound cat") {
+                playSound('catSound');
+                displayMessage("Aqui está o som de um gato!", 'bot');
+            } else if (userInput === "/sound dog") {
+                playSound('dogSound');
+                displayMessage("Aqui está o som de um cachorro!", 'bot');
+            } else if (userInput === "/sound fox") {
+                playSound('foxSound');
+                displayMessage("Aqui está o som de uma raposa!", 'bot');
+            } else if (userInput === "/sound duck") {
+                playSound('duckSound');
+                displayMessage("Aqui está o som de um pato!", 'bot');
+            } else if (userInput === "/sound gun") {
+                playSound('gunSound');
+                displayMessage("Aqui está o som de uma arma do Star Wars!", 'bot');
+            } else if (userInput === "/sound mario") {
+                playSound('marioSound'); 
+                displayMessage("Aqui está o som do Mario!", 'bot');
+            } else if (userInput === "/sound wow") {
+                playSound('wowSound'); 
+                displayMessage("Wowwwwwwwww!", 'bot');
+            } else if (userInput === "/sound boy") {
+                playSound('boySound');
+                displayMessage("Yeah boyyyyy", 'bot');
+            } else {
+                displayMessage("Comando não reconhecido. Tente /image cat, /image dog, /image fox, /image duck, /openai [prompt], ou /sound cat, /sound dog, /sound fox, /sound duck.", 'bot');
+            }
+    
+            // Limpa o campo de input após enviar a mensagem
+            document.getElementById("chatInput").value = "";
         }
-
-        // Limpa o campo de input após enviar a mensagem
-        document.getElementById("chatInput").value = "";
-    }
-});
+    });
+    

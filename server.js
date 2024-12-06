@@ -77,13 +77,18 @@ app.post('/api/openai-image', async (req, res) => {
     }
 });
 
+// Servir login.html na rota /login
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Servir index.html na rota raiz
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
 // Inicia o servidor
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
-
-// Servir index.html na raiz
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

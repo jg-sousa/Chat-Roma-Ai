@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const chatInput = document.getElementById('chatInput');
     const chatContainer = document.getElementById('chat');
   
-    // Função para gerar e adicionar mensagens no chat
+    // Função para gerar e adicionar mensagens no cha
     function addMessage(content, sender = 'user') {
       const messageDiv = document.createElement('div');
       messageDiv.classList.add('message', sender);
